@@ -2,25 +2,35 @@
 **Author:** Ante Šimić | **Role:** Engineering Physicist & DevOps Engineer
 
 ## Overview
-This repository documents my work in Computational Fluid Dynamics (CFD) using OpenFOAM, with a focus on motorsport aerodynamics. As an engineer with a background in both **Physics** and **DevOps**, my goal is not just to run simulations, but to build **automated and scalable workflows** that accelerate the aerodynamic design cycle.
+This repository documents my work in Computational Fluid Dynamics (CFD) using **OpenFOAM**, with a focus on motorsport aerodynamics. As an engineer with a background in **Physics** and **DevOps**, my goal is to build **automated and scalable workflows** that accelerate the aerodynamic design cycle.
+
+## Featured Results
+
+### 1. Ahmed Body Validation (Baseline)
+Successful simulation of the standard automotive benchmark body at 40 m/s.
+*   **Solver:** OpenFOAM v13 (`foamRun` / `incompressibleFluid`)
+*   **Turbulence Model:** k-Omega SST
+*   **Mesh:** ~240k cells with `snappyHexMesh`
+
+![Ahmed Body Velocity Slice](01_ahmed_body_validation/velocity_slice_final.png)
+*(Fig 1. Velocity magnitude slice showing flow acceleration over the roof and recirculation behind the slant)*
+
+---
 
 ## Project Roadmap
 
-### 1. Ahmed Body Validation Study (In Progress)
+### 1. Ahmed Body Validation Study (COMPLETED)
 **Objective:** Validate OpenFOAM settings against standard wind tunnel experimental data.
-- **Solver:** `simpleFoam` (Steady-state RANS, k-omega SST turbulence model)
-- **Methodology:**
-    - Mesh independence study (Coarse: 2M, Medium: 4M, Fine: 8M cells)
-    - Validation at 25° and 35° slant angles
-    - Comparison of Drag Coefficient (Cd) vs. Ahmed (1984) experimental data
-- **Current Status:** Mesh generation pipeline setup.
+- **Workflow:** Automated mesh generation and solver execution via Bash scripts.
+- **Physics:** Steady-state RANS simulation matching Re = 4.3M.
+- **Outcome:** Validated workflow for geometry preparation (`surfaceFeatures`), meshing, and solution.
 
-### 2. Automated Parametric Wing Analysis (Planned)
+### 2. Automated Parametric Wing Analysis (NEXT STEP)
 **Objective:** Demonstrate Python automation for CFD batch processing.
 - **Goal:** Eliminate manual case setup for routine parameter sweeps.
 - **Toolchain:** Python + Bash + OpenFOAM.
 - **Workflow:**
-    1. Python script modifies Angle of Attack (AoA) in `blockMeshDict` / CAD.
+    1. Python script modifies Angle of Attack (AoA).
     2. Automatically generates mesh and executes solver.
     3. Extracts Lift (Cl) and Drag (Cd) coefficients.
     4. Plots L/D polar curves automatically.
@@ -32,4 +42,4 @@ This repository documents my work in Computational Fluid Dynamics (CFD) using Op
 - **Post-Processing:** Visualization of pressure distribution and wing tip vortices using ParaView.
 
 ---
-*This portfolio is actively updated. Code and case files will be pushed as validation stages are completed.*
+*This portfolio is actively updated. Code and case files are organized by project directory.*

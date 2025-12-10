@@ -1,0 +1,16 @@
+# --- OpenFOAM Simulation Junk ---
+# Ignore the huge result folders (100, 200, 500, etc.)
+# But KEEP the '0/' folder because it has our setup files.
+01_ahmed_body_validation/simulations/openfoam/case_25deg/[1-9]*
+
+# Ignore the heavy mesh files (we can recreate them easily)
+01_ahmed_body_validation/simulations/openfoam/case_25deg/constant/polyMesh/
+01_ahmed_body_validation/simulations/openfoam/case_25deg/constant/extendedFeatureEdgeMesh/
+*.eMesh
+
+# Ignore parallel processing folders (if we use more cores later)
+processor*
+
+# --- ParaView/Visualization ---
+# Ignore the empty file
+*.foam

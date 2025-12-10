@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+vertices
+(
+    // Floor at Z = -0.05
+    (-2.0 -1.0 -0.05)   // 0
+    ( 5.0 -1.0 -0.05)   // 1
+    ( 5.0  1.0 -0.05)   // 2
+    (-2.0  1.0 -0.05)   // 3
+
+    // Ceiling at Z = 1.5
+    (-2.0 -1.0  1.50)   // 4
+    ( 5.0 -1.0  1.50)   // 5
+    ( 5.0  1.0  1.50)   // 6
+    (-2.0  1.0  1.50)   // 7
+);
+
+blocks
+(
+    // Grid density: 70 cells (X) x 20 cells (Y) x 15 cells (Z)
+    hex (0 1 2 3 4 5 6 7) (70 20 15) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces ((0 4 7 3));
+    }
+    outlet
+    {
+        type patch;
+        faces ((1 2 6 5));
+    }
+    ground
+    {
+        type wall;
+        faces ((0 3 2 1));
+    }
+    topAndSides
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+            (0 1 5 4)
+            (3 7 6 2)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);

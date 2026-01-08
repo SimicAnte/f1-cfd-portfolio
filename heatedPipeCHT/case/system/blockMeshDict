@@ -1,0 +1,160 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306 / 13                            |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   0.001; // Scale to mm
+
+vertices
+(
+    // --- Fluid Core (0-7) ---
+    // Bottom z=0
+    (-7 -7 0)  // 0
+    ( 7 -7 0)  // 1
+    ( 7  7 0)  // 2
+    (-7  7 0)  // 3
+    // Top z=2000
+    (-7 -7 2000) // 4
+    ( 7 -7 2000) // 5
+    ( 7  7 2000) // 6
+    (-7  7 2000) // 7
+
+    // --- Fluid Outer Circle (8-15) ---
+    // Bottom z=0, R=10
+    (-10 -10 0) // 8
+    ( 10 -10 0) // 9
+    ( 10  10 0) // 10
+    (-10  10 0) // 11
+    // Top z=2000
+    (-10 -10 2000) // 12
+    ( 10 -10 2000) // 13
+    ( 10  10 2000) // 14
+    (-10  10 2000) // 15
+
+    // --- Solid Outer Circle (16-23) ---
+    // Bottom z=0, R=12
+    (-12 -12 0) // 16
+    ( 12 -12 0) // 17
+    ( 12  12 0) // 18
+    (-12  12 0) // 19
+    // Top z=2000
+    (-12 -12 2000) // 20
+    ( 12 -12 2000) // 21
+    ( 12  12 2000) // 22
+    (-12  12 2000) // 23
+);
+
+blocks
+(
+    // Fluid Core
+    hex (0 1 2 3 4 5 6 7) fluid (10 10 100) simpleGrading (1 1 1)
+
+    // Fluid Outer Ring
+    hex (8 9 1 0 12 13 5 4) fluid (10 10 100) simpleGrading (1 1 1)
+    hex (1 9 10 2 5 13 14 6) fluid (10 10 100) simpleGrading (1 1 1)
+    hex (3 2 10 11 7 6 14 15) fluid (10 10 100) simpleGrading (1 1 1)
+    hex (11 8 0 3 15 12 4 7) fluid (10 10 100) simpleGrading (1 1 1)
+
+    // Solid Wall Ring
+    hex (16 17 9 8 20 21 13 12) solid (10 4 100) simpleGrading (1 1 1) // Bottom (Tan=10, Rad=4)
+    hex (9 17 18 10 13 21 22 14) solid (4 10 100) simpleGrading (1 1 1) // Right (Rad=4, Tan=10)
+    hex (11 10 18 19 15 14 22 23) solid (10 4 100) simpleGrading (1 1 1) // Top (Tan=10, Rad=4)
+    hex (19 16 8 11 23 20 12 15) solid (10 4 100) simpleGrading (1 1 1) // Left (Tan=10, Rad=4)
+);
+
+edges
+(
+    // Fluid Outer Arcs
+    arc 8 9 (0 -14.14 0)
+    arc 9 10 (14.14 0 0)
+    arc 10 11 (0 14.14 0)
+    arc 11 8 (-14.14 0 0)
+    
+    arc 12 13 (0 -14.14 2000)
+    arc 13 14 (14.14 0 2000)
+    arc 14 15 (0 14.14 2000)
+    arc 15 12 (-14.14 0 2000)
+
+    // Solid Outer Arcs
+    arc 16 17 (0 -16.97 0)
+    arc 17 18 (16.97 0 0)
+    arc 18 19 (0 16.97 0)
+    arc 19 16 (-16.97 0 0)
+
+    arc 20 21 (0 -16.97 2000)
+    arc 21 22 (16.97 0 2000)
+    arc 22 23 (0 16.97 2000)
+    arc 23 20 (-16.97 0 2000)
+);
+
+defaultPatch
+{
+    type wall;
+    name walls;
+}
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            // Fluid Inlet Faces
+            (0 1 2 3) 
+            (8 9 1 0) 
+            (1 9 10 2) 
+            (3 2 10 11) 
+            (11 8 0 3)
+            
+            // Solid Inlet Faces (usually adiabatic)
+            (16 17 9 8)
+            (9 17 18 10)
+            (11 10 18 19)
+            (19 16 8 11)
+        );
+    }
+    outlet
+    {
+        type patch;
+        faces
+        (
+            // Fluid Outlet Faces
+            (4 5 6 7)
+            (12 13 5 4)
+            (5 13 14 6)
+            (7 6 14 15)
+            (15 12 4 7)
+            
+            // Solid Outlet Faces
+            (20 21 13 12)
+            (13 21 22 14)
+            (15 14 22 23)
+            (23 20 12 15)
+        );
+    }
+    externalWall
+    {
+        type wall;
+        faces
+        (
+            // Outermost Solid Faces
+            (16 17 21 20)
+            (17 18 22 21)
+            (18 19 23 22)
+            (19 16 20 23)
+        );
+    }
+);
+
+// ************************************************************************* //

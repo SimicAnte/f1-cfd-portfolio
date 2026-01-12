@@ -7,6 +7,7 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
+    version     2.0;
     format      ascii;
     class       volScalarField;
     location    "0/solid";
@@ -24,32 +25,21 @@ boundaryField
     {
         type            zeroGradient;
     }
-
     outlet
     {
         type            zeroGradient;
     }
-
-    wall_solid
+    externalWall
     {
-        type            turbulentTemperatureCoupledBaffleMixed;
+        type            fixedGradient;
+        gradient        uniform 200;
+    }
+    solid_to_fluid
+    {
+        type            compressible::turbulentTemperatureCoupledBaffleMixed;
         Tnbr            T;
         kappaMethod     solidThermo;
         value           uniform 300;
-    }
-
-    externalWall
-    {
-        type            externalWallHeatFluxTemperature;
-        mode            flux;
-        q               uniform 10000; // 10 kW/m^2 heat flux
-        kappaMethod     solidThermo;
-        value           uniform 300;
-    }
-    
-    defaultFaces
-    {
-        type            empty;
     }
 }
 

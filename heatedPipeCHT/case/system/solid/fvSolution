@@ -10,6 +10,7 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
+    location    "system/solid";
     object      fvSolution;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -25,7 +26,16 @@ solvers
     }
 }
 
+PIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+}
+
 relaxationFactors
 {
-    equations       1;
+    equations
+    {
+        h               1;
+        e               1;
+    }
 }

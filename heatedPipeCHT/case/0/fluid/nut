@@ -26,18 +26,19 @@ boundaryField
         type            calculated;
         value           uniform 0;
     }
+
     outlet
     {
         type            calculated;
         value           uniform 0;
     }
-    wall_fluid
+
+    // THE FIX: Must be a wall function, not "calculated"
+    fluid_to_solid
     {
         type            nutkWallFunction;
         value           uniform 0;
     }
-    defaultFaces
-    {
-        type            empty;
-    }
 }
+
+// ************************************************************************* //

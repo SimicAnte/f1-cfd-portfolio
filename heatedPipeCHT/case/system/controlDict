@@ -1,9 +1,9 @@
 /*--------------------------------*- C++ -*----------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  13
-     \\/     M anipulation  |
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306 / 13                            |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
@@ -14,43 +14,101 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-regionSolvers
-{
-    fluid           fluid;
-    metal           solid;
-    heater          solid;
-}
+application     chtMultiRegionFoam;
 
 startFrom       startTime;
-
 startTime       0;
-
 stopAt          endTime;
+endTime         2001;
 
-endTime         20;
+// --- Adaptive Time Stepping (Critical for Fine Mesh) ---
+deltaT          1e-5;         // Initial safety step
+adjustTimeStep  yes;          // Enable auto-adjustment
+maxCo           1.0;          // Keep Courant number <= 1.0 (Safe)
+maxDeltaT       1.0;          // Upper limit for time step
+// -------------------------------------------------------
 
-deltaT          1e-3;
-
-writeControl    adjustableRunTime;
-
-writeInterval   1;
-
+writeControl    timeStep;
+writeInterval   100;
 purgeWrite      0;
 
-writeFormat     binary;
-
+writeFormat     ascii;
 writePrecision  6;
-
 writeCompression off;
-
 timeFormat      general;
-
 timePrecision   6;
 
 runTimeModifiable true;
 
-maxCo           1.0;
 
-adjustTimeStep  yes;
+// -------------------------------------------------------------------------- //
+//                   POST-PROCESSING FUNCTIONS                                //
+// -------------------------------------------------------------------------- //
+
+functions
+{
+    // Calculate Wall Heat Flux
+    calcHeatFlux
+    {
+        type            wallHeatFlux;
+        libs            ("libfieldFunctionObjects.so");
+        region          fluid;
+        writeControl    timeStep;
+        writeInterval   1;
+        enabled         true;
+        log             true;
+    }
+
+    // Monitor Average Wall Temperature
+    avgWallTemp
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        region          fluid;
+        operation       areaAverage;
+        
+        writeFields     false;
+        surfaceFormat   none;
+        patches         (fluid_to_solid);
+        
+        fields          (T);
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+
+    // Monitor Inlet Temperature Only
+    averageInletTemp
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        region          fluid;
+        operation       areaAverage;
+        writeFields     false;
+        surfaceFormat   none;
+        patches         (inlet);
+        fields          (T);
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+
+    // Monitor Outlet Temperature Only
+    averageOutletTemp
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        region          fluid;
+        operation       areaAverage;
+        writeFields     false;
+        surfaceFormat   none;
+        patches         (outlet);
+        fields          (T);
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+
+}
 
 // ************************************************************************* //

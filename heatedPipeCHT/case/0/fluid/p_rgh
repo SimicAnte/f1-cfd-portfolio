@@ -7,6 +7,7 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
+    version     2.0;
     format      ascii;
     class       volScalarField;
     location    "0/fluid";
@@ -25,22 +26,15 @@ boundaryField
         type            fixedFluxPressure;
         value           uniform 100000;
     }
-
     outlet
     {
         type            fixedValue;
         value           uniform 100000;
     }
-
-    wall_fluid
+    fluid_to_solid
     {
         type            fixedFluxPressure;
         value           uniform 100000;
-    }
-    
-    defaultFaces
-    {
-        type            empty;
     }
 }
 

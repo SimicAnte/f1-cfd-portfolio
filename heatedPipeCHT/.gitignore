@@ -1,0 +1,48 @@
+# --- OpenFOAM Case Files ---
+# Ignore time directories (numbers), but keep 0 and 0.org
+[1-9]*
+0.*
+!0/
+!0.org/
+
+# Ignore processor directories (parallel runs)
+processor*
+
+# Ignore post-processing & logs
+postProcessing/
+log
+*.log
+
+# --- Visualization & Temporary ---
+*.vtk
+*.vtu
+*.foam
+*.OpenFOAM
+.dummy
+
+# --- Dynamic Code ---
+dynamicCode/
+
+# --- System/Editor Garbage ---
+.DS_Store
+*~
+*.bak
+*.old
+*.swp
+*.dep
+
+# --- Ignore Generated Mesh Files ---
+# Ignore the default mesh folder
+constant/polyMesh/
+
+# Ignore region-specific mesh folders (for CHT)
+constant/fluid/polyMesh/
+constant/solid/polyMesh/
+
+# Ignore cell/face/point zones - large
+constant/fluid/cellZones
+constant/fluid/faceZones
+constant/fluid/pointZones
+constant/solid/cellZones
+constant/solid/faceZones
+constant/solid/pointZones

@@ -17,7 +17,7 @@ FoamFile
 
 dimensions      [0 2 -2 0 0 0 0];
 
-internalField   uniform 0.01;
+internalField   uniform 0.01; // Small initial turbulence
 
 boundaryField
 {
@@ -26,17 +26,19 @@ boundaryField
         type            fixedValue;
         value           uniform 0.01;
     }
+
     outlet
     {
-        type            zeroGradient;
+        type            inletOutlet;
+        inletValue      uniform 0.01;
+        value           uniform 0.01;
     }
-    wall_fluid
+
+    // Wall Function for k
+    fluid_to_solid
     {
         type            kqRWallFunction;
         value           uniform 0.01;
     }
-    defaultFaces
-    {
-        type            empty;
-    }
 }
+// ************************************************************************* //

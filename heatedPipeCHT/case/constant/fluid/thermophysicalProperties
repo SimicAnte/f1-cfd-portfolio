@@ -19,33 +19,39 @@ thermoType
 {
     type            heRhoThermo;
     mixture         pureMixture;
-    transport       const;
+    transport       tabulated;
     thermo          hConst;
-    equationOfState perfectFluid;
+    equationOfState rhoConst;
     specie          specie;
     energy          sensibleEnthalpy;
 }
 
 mixture
 {
-    specie
-    {
-        nMoles          1;
-        molWeight       18.01528;
-    }
-    thermodynamics
-    {
-        Cp              4182;
-        Hf              0;
-    }
+    specie { molWeight 18.0; }
+    thermodynamics { Cp 4180; Hf 0; }
+    equationOfState { rho 1000; }
     transport
     {
-        mu              0.001;
-        Pr              7;
-    }
-    equationOfState
-    {
-        rho             1000;
-        R               3000;
+        mu      table 
+        (
+            273  1.793e-3
+            300  8.55e-4
+            350  3.55e-4
+            400  1.70e-4
+            450  9.00e-5
+            500  5.20e-5
+        );
+        kappa   table
+        (
+            273  0.561
+            300  0.613
+            350  0.668
+            400  0.682
+            450  0.668
+            500  0.651
+        );
     }
 }
+
+// ************************************************************************* //

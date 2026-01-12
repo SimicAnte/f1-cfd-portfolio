@@ -7,43 +7,35 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    format      binary;
-    class       polyBoundaryMesh;
-    location    "constant/fluid/polyMesh";
-    object      boundary;
+    format      ascii;
+    class       volScalarField;
+    location    "0/fluid";
+    object      wallHeatFlux;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-3
-(
+dimensions      [1 0 -3 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
     inlet
     {
-        type            patch;
-        nFaces          500;
-        startFace       147500;
+        type            calculated;
+        value           uniform 0;
     }
     outlet
     {
-        type            patch;
-        nFaces          500;
-        startFace       148000;
+        type            calculated;
+        value           uniform 0;
     }
     fluid_to_solid
     {
-        type            mappedWall;
-        inGroups        List<word> 
-2
-(
-wall
-mapped
-)
-;
-        nFaces          4000;
-        startFace       148500;
-        neighbourRegion solid;
-        neighbourPatch  solid_to_fluid;
-        transformType   none;
+        type            calculated;
+        value           uniform 0;
     }
-)
+}
+
 
 // ************************************************************************* //

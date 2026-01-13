@@ -4,7 +4,7 @@
 
 ### Flow Visualization
 *Longitudinal view of the velocity field. Note the development of the boundary layer from the inlet (left) to the fully developed profile downstream.*
-![Velocity Profile](./images/velocity_profile.jpg)
+![Velocity Profile](./images/velocity_profile.jpeg)
 
 ## Project Overview
 This project validates a high-fidelity turbulent pipe flow simulation with coupled heat transfer against standard engineering correlations (**Dittus-Boelter**). It was developed to demonstrate proficiency in:

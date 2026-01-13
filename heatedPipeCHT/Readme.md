@@ -1,13 +1,10 @@
 # Heated Pipe Conjugate Heat Transfer (CHT) Benchmark
 
-
-> **Note to Reviewers:** I am currently finalizing the post-processing and documentation for this case study. The complete Analysis Report (PDF) and flow visualizations will be available by **January 15th**.
-
-
 **Turbulent thermohydraulic validation case (Re ≈ 40,000)** demonstrating conjugate heat transfer (fluid-solid coupling) for industrial cooling applications using OpenFOAM.
 
-![Simulation Preview](https://via.placeholder.com/800x400?text=Insert+Paraview+Screenshot+Here)
-*(Add a slice view of Temperature or Velocity magnitude here)*
+### Flow Visualization
+*Longitudinal view of the velocity field. Note the development of the boundary layer from the inlet (left) to the fully developed profile downstream.*
+![Velocity Profile](./images/velocity_profile.jpg)
 
 ## Project Overview
 This project validates a high-fidelity turbulent pipe flow simulation with coupled heat transfer against standard engineering correlations (**Dittus-Boelter**). It was developed to demonstrate proficiency in:
@@ -24,7 +21,7 @@ This project validates a high-fidelity turbulent pipe flow simulation with coupl
 | **Solid** | Steel | 2mm thick wall, constant heat flux ($q'' \approx 12 kW/m^2$) |
 | **Solver** | `chtMultiRegionFoam` | Transient PIMPLE solver for multi-region heat transfer |
 | **Turbulence** | $k-\omega$ SST | Selected for superior near-wall resolution vs $k-\epsilon$ |
-| **Mesh** | 800k Cells | Full O-Grid, $L=5m$, $y^+ < 5$ (Resolved Boundary Layer) |
+| **Mesh** | 40,000 Cells | Full O-Grid, $L=5m$, $y^+ < 5$ (Resolved Boundary Layer) |
 
 ### Key Challenges Solved
 1. **Laminar-to-Turbulent Transition:** Overcame initial solver limitations where `momentumTransport` defaulted to laminar, correcting the setup to fully activate the $k-\omega$ SST turbulence budget.
@@ -44,11 +41,27 @@ The simulation results were validated against the **Dittus-Boelter correlation**
 
 **Physics Note:** The +10% deviation is physically expected. The Dittus-Boelter correlation assumes *fully developed* flow ($L/D > 60$). Our domain ($L/D = 50$) includes the thermal entrance region where the boundary layer is thinner and heat transfer is naturally higher, raising the average $h$.
 
-## 📂 Repository Structure
+## Automation & Validation
+To ensure reproducibility and enable parametric analysis, this project includes a fully automated Python pipeline (`automation/`) that treats the simulation infrastructure as code.
+
+### 1. Parametric Sweep Runner (`run_sweep.py`)
+Automates the execution of multiple design points (Reynolds Number sweeps).
+- **Regex Configuration:** Programmatically parses and updates `0/fluid/U` to set precise inlet velocities based on target Re.
+- **Log Parsing:** Reads raw OpenFOAM post-processing files (`.dat`) to extract convergence metrics ($T_{wall}$, $q_{wall}$).
+- **Data Aggregation:** Compiles results from multiple runs into a structured CSV file for analysis.
+
+### 2. Validation Analyzer (`plot_results.py`)
+A data analysis script that validates the CFD results against theory.
+- **Physics Calculation:** Computes the Nusselt number ($Nu$) and Heat Transfer Coefficient ($h$) from the sweep data.
+- **Correlation Benchmarking:** Generates comparison plots overlaying CFD results on the Dittus-Boelter curve.
+- **Error Quantifiction:** Automatically calculates percentage deviation for each design point.
+
+## Repository Structure
 ```bash
 ├── case/                   # OpenFOAM simulation case (v13/v2306 compatible)
 │   ├── system/             # Mesh (blockMeshDict) and Solver settings
 │   ├── constant/           # Physics properties (Water, Steel, Turbulence)
 │   └── 0/                  # Initial Boundary Conditions (U, p, T, k, omega)
-├── automation/             # (Optional) Python scripts for parametric sweeps
+├── automation/             # Python scripts for parametric sweeps and validation
+├── images/                 # Visualization results
 └── validation/             # Validation data and comparison charts

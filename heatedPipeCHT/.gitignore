@@ -5,44 +5,28 @@
 !0/
 !0.org/
 
-# Ignore processor directories (parallel runs)
+# --- MESH FILES ---
+**/polyMesh/
+**/extendedFeatureEdgeMesh/
+**/cellZones
+**/faceZones
+**/pointZones
+
+# --- Processor directories (parallel runs) ---
 processor*
 
-# Ignore post-processing & logs
+# --- Visualization & Logs ---
 postProcessing/
-log
+VTK/
+logs/
 *.log
-
-# --- Visualization & Temporary ---
 *.vtk
 *.vtu
 *.foam
 *.OpenFOAM
-.dummy
-
-# --- Dynamic Code ---
-dynamicCode/
 
 # --- System/Editor Garbage ---
+dynamicCode/
 .DS_Store
-*~
-*.bak
-*.old
 *.swp
-*.dep
-
-# --- Ignore Generated Mesh Files ---
-# Ignore the default mesh folder
-constant/polyMesh/
-
-# Ignore region-specific mesh folders (for CHT)
-constant/fluid/polyMesh/
-constant/solid/polyMesh/
-
-# Ignore cell/face/point zones - large
-constant/fluid/cellZones
-constant/fluid/faceZones
-constant/fluid/pointZones
-constant/solid/cellZones
-constant/solid/faceZones
-constant/solid/pointZones
+*.bak

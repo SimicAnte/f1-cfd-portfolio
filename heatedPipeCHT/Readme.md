@@ -3,8 +3,9 @@
 **Turbulent thermohydraulic validation case (Re ≈ 40,000)** demonstrating conjugate heat transfer (fluid-solid coupling) for industrial cooling applications using OpenFOAM.
 
 ### Flow Visualization
-*Longitudinal view of the velocity field. Note the development of the boundary layer from the inlet (left) to the fully developed profile downstream.*
+*Longitudinal slice of the pipe showing the velocity magnitude field. The visualization highlights the fully developed turbulent profile with high velocity in the core (red) and the no-slip condition at the walls (blue).*
 ![Velocity Profile](./images/velocity_profile.jpeg)
+
 
 ## Project Overview
 This project validates a high-fidelity turbulent pipe flow simulation with coupled heat transfer against standard engineering correlations (**Dittus-Boelter**). It was developed to demonstrate proficiency in:

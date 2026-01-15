@@ -4,7 +4,7 @@ import numpy as np
 
 # --- Parameters ---
 RESULTS_FILE = "sweep_results.csv"
-Pr = 7.0 # Prandtl number for Water
+Pr = 6.13 # Prandtl number for Water
 
 def dittus_boelter(Re):
     # Nu = 0.023 * Re^0.8 * Pr^0.4

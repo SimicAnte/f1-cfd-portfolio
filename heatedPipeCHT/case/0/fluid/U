@@ -17,20 +17,20 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (0 0 2);
+internalField   uniform (0 0 1.2093); /* velocity for Re=40 000 */
 
 boundaryField
 {
     inlet
     {
         type            fixedValue;
-        value           uniform (0 0 2);
+        value           uniform (0 0 1.2093);
     }
     outlet
     {
         type            inletOutlet;
-        inletValue      uniform (0 0 0);
-        value           uniform (0 0 0);
+        inletValue      uniform (0 0 1.2093);
+        value           uniform (0 0 1.2093);
     }
     fluid_to_solid
     {

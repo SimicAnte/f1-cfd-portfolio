@@ -4,7 +4,7 @@ import shutil
 import re
 
 # --- Configuration ---
-CASE_DIR = "../case"
+CASE_DIR = "case"
 RESULTS_FILE = "sweep_results.csv"
 
 # Physics Parameters
@@ -46,7 +46,7 @@ def run_solver():
 def extract_data(Re):
     """Read postProcessing files to get Q_wall and T_wall"""
     try:
-        # 1. Get Heat Flux (Last value)
+        # 1. Get Heat Flux
         flux_file = os.path.join(CASE_DIR, "postProcessing/fluid/calcHeatFlux/0/wallHeatFlux.dat")
         with open(flux_file, 'r') as f:
             lines = [l for l in f.readlines() if not l.startswith('#')]
@@ -54,7 +54,7 @@ def extract_data(Re):
             last_line = lines[-1].split()
             q_wall = float(last_line[5])
 
-        # 2. Get Wall Temp (Last value)
+        # 2. Get Wall Temp
         temp_file = os.path.join(CASE_DIR, "postProcessing/fluid/avgWallTemp/0/surfaceFieldValue.dat")
         with open(temp_file, 'r') as f:
             lines = [l for l in f.readlines() if not l.startswith('#')]
@@ -62,13 +62,20 @@ def extract_data(Re):
             last_line = lines[-1].split()
             T_wall = float(last_line[1])
             
-        # 3. Get Inlet/Outlet Temp (for Bulk)
-        bulk_file = os.path.join(CASE_DIR, "postProcessing/fluid/inletOutletTemp/0/surfaceFieldValue.dat")
-        with open(bulk_file, 'r') as f:
+        # 3. Get Inlet Temp
+        inlet_file = os.path.join(CASE_DIR, "postProcessing/fluid/averageInletTemp/0/surfaceFieldValue.dat")
+        with open(inlet_file, 'r') as f:
             lines = [l for l in f.readlines() if not l.startswith('#')]
-            last_line = lines[-1].split()
-            # If average of inlet/outlet is one column:
-            T_bulk = float(last_line[1])
+            T_in = float(lines[-1].split()[1])
+
+        # 4. Get Outlet Temp
+        outlet_file = os.path.join(CASE_DIR, "postProcessing/fluid/averageOutletTemp/0/surfaceFieldValue.dat")
+        with open(outlet_file, 'r') as f:
+            lines = [l for l in f.readlines() if not l.startswith('#')]
+            T_out = float(lines[-1].split()[1])
+
+        # Calculate Bulk Temp (Arithmetic Mean)
+        T_bulk = (T_in + T_out) / 2.0
 
         return q_wall, T_wall, T_bulk
 
